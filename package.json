@@ -11,7 +11,7 @@
     "prettify": "prettier --check .",
     "prepare": "husky install",
     "typecheck": "tsc",
-    "test": "npm run jest && npm run lint && npm run stylelint && npm run prettify && npm run typecheck",
+    "test": "npm run lint && npm run stylelint && npm run prettify && npm run typecheck",
     "jest": "jest",
     "jest-watch": "jest --watch",
     "storybook": "start-storybook -s ./public -p 6006",
