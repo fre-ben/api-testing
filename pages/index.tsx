@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { User } from "../server/db";
 import styles from "../styles/Home.module.css";
 import { fetchUsers, fetchUsersByName, postNewUser } from "../utils/api";
@@ -12,6 +12,15 @@ export default function Home() {
     email: "",
     password: "",
   });
+
+  useEffect(() => {
+    setSearchQuery("");
+    setEntries({
+      name: "",
+      email: "",
+      password: "",
+    });
+  }, [users]);
 
   async function handleGetUsersClick(): Promise<void> {
     const users = await fetchUsers();
@@ -27,10 +36,11 @@ export default function Home() {
     setUsers([users[randomNumber]]);
   }
 
-  async function handleSubmit(event, searchName) {
+  async function handleSubmit(event, searchName: string) {
     event.preventDefault();
     const users = await fetchUsersByName(searchName);
     setUsers(users);
+    setSearchQuery("");
   }
 
   async function handleUserFormSubmit(event) {
@@ -43,7 +53,7 @@ export default function Home() {
     };
 
     await postNewUser(newUser);
-    return setEntries({
+    setEntries({
       name: "",
       email: "",
       password: "",
@@ -75,16 +85,19 @@ export default function Home() {
           <input
             type="text"
             placeholder="Name"
+            value={entries.name}
             onChange={(e) => setEntries({ ...entries, name: e.target.value })}
           />
           <input
             type="text"
             placeholder="Email"
+            value={entries.email}
             onChange={(e) => setEntries({ ...entries, email: e.target.value })}
           />
           <input
             type="password"
             placeholder="Password"
+            value={entries.password}
             onChange={(e) =>
               setEntries({ ...entries, password: e.target.value })
             }
@@ -98,6 +111,7 @@ export default function Home() {
             <input
               type="text"
               placeholder="Search users"
+              value={searchQuery}
               onChange={(event) => setSearchQuery(event.target.value)}
             />
           </label>
