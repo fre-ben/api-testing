@@ -2,7 +2,12 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { User } from "../server/db";
 import styles from "../styles/Home.module.css";
-import { fetchUsers, fetchUsersByName, postNewUser } from "../utils/api";
+import {
+  deleteUser,
+  fetchUsers,
+  fetchUsersByName,
+  postNewUser,
+} from "../utils/api";
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
@@ -60,14 +65,21 @@ export default function Home() {
     });
   }
 
-  const displayUsers = (users) => {
+  async function handleDeleteUser(userName: string) {
+    await deleteUser(userName);
+    const index = users.findIndex((user) => user.name === userName);
+    setUsers(users.splice(index, 1));
+    setUsers(users);
+  }
+
+  const displayUsers = (users: User[]) => {
     if (!users) {
       <div>Loading...</div>;
     }
     return users.map((user: User) => (
       <li key={JSON.stringify(user.id)}>
         <p>{user.name}</p>
-        <button>🐬</button>
+        <button onClick={() => handleDeleteUser(user.name)}>🐬</button>
         <span>{user.email}</span>
       </li>
     ));

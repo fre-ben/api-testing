@@ -8,7 +8,7 @@ GET http://localhost:3000/api/movies/573a1394f29313caabcdfa3e
 GET http://localhost:3000/api/users
 
 ### GET USERS BY NAME
-GET http://localhost:3000/api/users/amy
+GET http://localhost:3000/api/users/jakk
 
 ### POST NEW USER
 POST http://localhost:3000/api/users
@@ -19,3 +19,6 @@ Content-Type: application/json
     "email": "willi@bofydFAdddsen.com",
     "password": "bOyDafadGAd123"
 }
+
+### DELETE USER
+DELETE http://localhost:3000/api/users/Jakkjahsaff

@@ -25,3 +25,11 @@ export async function postNewUser(newUser: User) {
     alert("User already exists " + response.status);
   }
 }
+
+export async function deleteUser(userName: string) {
+  const response = await fetch(`/api/users/${userName}`, {
+    method: "DELETE",
+    redirect: "manual",
+  });
+  return response;
+}

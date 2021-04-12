@@ -69,3 +69,10 @@ export async function postNewUser(newUser: User) {
 
   return userCollection.insertOne(newUser);
 }
+
+export async function deleteUserFromDB(userName: any) {
+  await connectDB(url, "sample_mflix");
+  const userCollection = db.collection("users");
+
+  return userCollection.findOneAndDelete({ name: userName });
+}
