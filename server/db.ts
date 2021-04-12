@@ -6,7 +6,7 @@ let db: Db = null;
 const url = process.env.MONGODB_URL;
 
 export type User = {
-  id: ObjectID;
+  id?: ObjectID;
   name: string;
   email: string;
   password: string;

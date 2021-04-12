@@ -22,6 +22,6 @@ export async function postNewUser(newUser: User) {
   if (response.ok) {
     return response;
   } else {
-    alert("HTTP-Error: " + response.status);
+    alert("User already exists " + response.status);
   }
 }

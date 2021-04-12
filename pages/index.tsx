@@ -1,16 +1,17 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { User } from "../server/db";
 import styles from "../styles/Home.module.css";
-import { fetchUsers, fetchUsersByName } from "../utils/api";
+import { fetchUsers, fetchUsersByName, postNewUser } from "../utils/api";
 
 export default function Home() {
   const [users, setUsers] = useState<User[]>([]);
   const [searchQuery, setSearchQuery] = useState<string>("");
-
-  useEffect(() => {
-    displayUsers(users);
-  }, []);
+  const [entries, setEntries] = useState<User>({
+    name: "",
+    email: "",
+    password: "",
+  });
 
   async function handleGetUsersClick(): Promise<void> {
     const users = await fetchUsers();
@@ -26,10 +27,27 @@ export default function Home() {
     setUsers([users[randomNumber]]);
   }
 
-  async function handleSubmit(searchName) {
+  async function handleSubmit(event, searchName) {
     event.preventDefault();
     const users = await fetchUsersByName(searchName);
     setUsers(users);
+  }
+
+  async function handleUserFormSubmit(event) {
+    event.preventDefault();
+
+    const newUser = {
+      name: entries.name,
+      email: entries.email,
+      password: entries.password,
+    };
+
+    await postNewUser(newUser);
+    return setEntries({
+      name: "",
+      email: "",
+      password: "",
+    });
   }
 
   const displayUsers = (users) => {
@@ -39,6 +57,7 @@ export default function Home() {
     return users.map((user: User) => (
       <li key={JSON.stringify(user.id)}>
         <p>{user.name}</p>
+        <button>🐬</button>
         <span>{user.email}</span>
       </li>
     ));
@@ -52,14 +71,34 @@ export default function Home() {
       </Head>
 
       <main className={styles.main}>
+        <form onSubmit={handleUserFormSubmit}>
+          <input
+            type="text"
+            placeholder="Name"
+            onChange={(e) => setEntries({ ...entries, name: e.target.value })}
+          />
+          <input
+            type="text"
+            placeholder="Email"
+            onChange={(e) => setEntries({ ...entries, email: e.target.value })}
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            onChange={(e) =>
+              setEntries({ ...entries, password: e.target.value })
+            }
+          />
+          <button>Create new user</button>
+        </form>
         <button onClick={handleGetUsersClick}>Get users</button>
         <button onClick={handleRandomUserClick}>Get random user</button>
-        <form onSubmit={() => handleSubmit(searchQuery)}>
+        <form onSubmit={(event) => handleSubmit(event, searchQuery)}>
           <label>
             <input
               type="text"
               placeholder="Search users"
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onChange={(event) => setSearchQuery(event.target.value)}
             />
           </label>
           <button>Search!</button>
