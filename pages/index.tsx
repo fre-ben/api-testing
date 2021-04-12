@@ -63,6 +63,7 @@ export default function Home() {
       email: "",
       password: "",
     });
+    setUsers([newUser]);
   }
 
   async function handleDeleteUser(userName: string) {
